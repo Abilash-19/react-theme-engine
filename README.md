@@ -22,35 +22,17 @@ pnpm add react-theming-engine
 
 ## 🚀 Quick Start
 
-Wrap your application with the `ThemeProvider`:
+Wrap your application with the `ThemeProvider`. You can specify a `defaultThemeName` and a `storageKey` to persist the user's preference.
 
 ```tsx
-import { ThemeProvider, lightTheme } from 'react-theming-engine';
+import { ThemeProvider } from 'react-theming-engine';
 
 function App() {
   return (
-    <ThemeProvider theme={lightTheme}>
+    <ThemeProvider defaultThemeName="light" storageKey="my-app-theme">
       <YourApp />
     </ThemeProvider>
   );
-}
-```
-
-### Use Semantic Tokens in your CSS
-
-The engine automatically injects CSS variables into the `:root` (or the provider element).
-
-```css
-.card {
-  background-color: var(--color-surface);
-  color: var(--color-foreground);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-}
-
-.button-primary {
-  background-color: var(--color-primary-500);
-  color: var(--color-foreground-inverse);
 }
 ```
 
@@ -59,29 +41,94 @@ The engine automatically injects CSS variables into the `:root` (or the provider
 ### Switching Themes
 
 ```tsx
-import { useTheme, darkTheme, oceanTheme } from 'react-theming-engine';
+import { useTheme } from 'react-theming-engine';
 
 const ThemeSwitcher = () => {
   const { setTheme } = useTheme();
 
   return (
     <div>
-      <button onClick={() => setTheme(darkTheme)}>Dark Mode</button>
-      <button onClick={() => setTheme(oceanTheme)}>Ocean Theme</button>
+      <button onClick={() => setTheme('dark')}>Dark Mode</button>
+      <button onClick={() => setTheme('ocean')}>Ocean Theme</button>
     </div>
   );
 };
 ```
 
-### Overriding Primary Color
+### Overriding Tokens & Palette
 
-You can override the primary color scale dynamically without changing the whole theme:
+You can apply ad-hoc overrides to the current theme. This is useful for dynamic branding or user-customized colors.
 
 ```tsx
-const { setPrimaryColor } = useTheme();
+const { overrideTheme } = useTheme();
 
-// Set to a system scale (e.g., 'indigo') or a custom color scale object
-setPrimaryColor('indigo'); 
+const handleBrandingChange = (brandColor: string) => {
+  overrideTheme({
+    tokens: {
+      accent: brandColor,
+      surface: '#f0f0f0',
+    },
+    shape: {
+      radiusMd: '12px'
+    }
+  });
+};
+```
+
+## 🏗️ Theme Structure
+
+The engine uses a strictly typed structure to ensure consistency across your app.
+
+### 1. Brand Palette
+Raw color scales (50-900) for different colors.
+```typescript
+interface BrandPalette {
+  primary: ColorScale;
+  success: ColorScale;
+  warning: ColorScale;
+  error: ColorScale;
+  info: ColorScale;
+}
+```
+
+### 2. Semantic Tokens
+Functional roles that map to brand colors.
+```typescript
+interface SemanticTokens {
+  background: string;
+  surface: string;
+  foreground: string;
+  border: string;
+  accent: string;
+  // ... and more
+}
+```
+
+### 3. Shape & Typography
+Standardized radii and fonts.
+```typescript
+interface ThemeShape {
+  radiusSm: string;
+  radiusMd: string;
+  radiusLg: string;
+}
+
+interface ThemeTypography {
+  fontFamilySans: string;
+  fontFamilyMono: string;
+}
+### 4. Full Theme Config
+The complete object used to define a theme.
+```typescript
+interface ThemeConfig {
+  name: string;
+  colorMode: 'light' | 'dark';
+  palette: BrandPalette;
+  neutral: ColorScale;
+  tokens: SemanticTokens;
+  shape: ThemeShape;
+  typography: ThemeTypography;
+}
 ```
 
 ## 🌪️ Tailwind CSS Integration
