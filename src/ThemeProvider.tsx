@@ -19,6 +19,7 @@ import { oceanTheme } from "./presets/ocean";
 import { sunsetTheme } from "./presets/sunset";
 import { forestTheme } from "./presets/forest";
 import { violetTheme } from "./presets/violet";
+import { earthTheme } from "./presets/earth";
 import { applyTheme, mergeTheme } from "./utils";
 
 // ─── Registry ────────────────────────────────────────────────────────────────
@@ -31,6 +32,7 @@ const THEME_REGISTRY: Record<string, ThemeConfig> = {
   sunset: sunsetTheme,
   forest: forestTheme,
   violet: violetTheme,
+  earth: earthTheme,
 };
 
 /**
