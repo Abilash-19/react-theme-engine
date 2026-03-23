@@ -1,170 +1,134 @@
-# react-theming-engine
+# 🎨 react-theming-engine
 
-A lightweight, powerful, 3-layer React theming engine that bridges the gap between **Brand Palettes**, **Semantic Tokens**, and **CSS Variables**.
+A production-ready, lightweight React theming engine that bridges the gap between **Brand Palettes**, **Semantic Tokens**, and **CSS Variables**. Built for high-performance design systems.
 
-## 🌟 Features
+[![npm version](https://img.shields.io/npm/v/react-theming-engine.svg?style=flat-square)](https://www.npmjs.com/package/react-theming-engine)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-- **3-Layer Architecture**: Brand Palette → Semantic Tokens → CSS Variables.
-- **Dynamic Theming**: Change themes or primary colors at runtime without page reloads.
-- **Tailwind CSS Ready**: Includes a built-in Tailwind preset that maps tokens to Tailwind utility classes.
-- **Type-Safe**: Complete TypeScript support for themes and tokens.
-- **Multiple Presets**: Comes with built-in presets: `light`, `dark`, `ocean`, `sunset`, `forest`, and `violet`.
+```bash
+npm install react-theming-engine
+```
+
+## ✨ Features
+
+- 🏗️ **3-Layer Architecture**: Brand Palette → Semantic Tokens → CSS Variables.
+- 🌓 **Dynamic Modes**: Native Light and Dark support with smart palette migration.
+- 🎨 **Runtime Branding**: Change primary colors or overrides on-the-fly with `overrideTheme`.
+- ⚡ **Zero-Runtime Overhead**: Styles are applied via CSS variables for maximum performance.
+- 🌪️ **Tailwind Friendly**: Includes a first-class preset for utility-first workflows.
+- 🔒 **Type-Safe**: Full TypeScript support with exported types for all tokens.
+- 💾 **Persistence**: Built-in localStorage persistence for user preferences.
+
+## 🛠️ Technology Stack
+
+- **[React](https://react.dev/)** (`^18.0.0`): Core UI library.
+- **[TypeScript](https://www.typescriptlang.org/)** (`^5.7.0`): Strongly typed programming.
+- **[tsup](https://tsup.egoist.dev/)**: High-performance library bundler.
+- **[Tailwind CSS](https://tailwindcss.com/)**: Optional integration for utility classes.
 
 ## 📦 Installation
 
 ```bash
 npm install react-theming-engine
-# or
-yarn add react-theming-engine
-# or
-pnpm add react-theming-engine
 ```
 
 ## 🚀 Quick Start
 
-Wrap your application with the `ThemeProvider`. You can specify a `defaultThemeName` and a `storageKey` to persist the user's preference.
+### 1. Initialize the Provider
+The `ThemeProvider` handles state, persistence, and DOM variable injection.
 
 ```tsx
 import { ThemeProvider } from 'react-theming-engine';
 
 function App() {
   return (
-    <ThemeProvider defaultThemeName="light" storageKey="my-app-theme">
-      <YourApp />
+    <ThemeProvider defaultThemeName="light" storageKey="app-theme">
+      <MainLayout />
     </ThemeProvider>
   );
 }
 ```
 
-## 🎨 Dynamic Customization
+### 2. Implementation Options
 
-### Switching Themes
+#### Option A: Vanilla CSS (Recommended for Flexibility)
+The engine automatically injects variables like `--color-background` and `--color-accent` into the `:root`.
 
-```tsx
-import { useTheme } from 'react-theming-engine';
+```css
+/* In your CSS files */
+.my-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
 
-const ThemeSwitcher = () => {
-  const { setTheme } = useTheme();
-
-  return (
-    <div>
-      <button onClick={() => setTheme('dark')}>Dark Mode</button>
-      <button onClick={() => setTheme('ocean')}>Ocean Theme</button>
-    </div>
-  );
-};
+.my-text {
+  color: var(--color-foreground-muted);
+}
 ```
 
-### Overriding Tokens & Palette
+#### Option B: Tailwind CSS
+Add the preset to your config to use tokens as utility classes.
 
-You can apply ad-hoc overrides to the current theme. This is useful for dynamic branding or user-customized colors.
+```javascript
+/* tailwind.config.js */
+import { themePreset } from 'react-theming-engine/tailwind';
+
+export default {
+  content: ["./src/**/*.{ts,tsx}"],
+  presets: [themePreset],
+}
+```
+*Usage: `<div className="bg-surface text-foreground-muted rounded-md" />`*
+
+---
+
+## 🏗️ Dynamic Branding (Advanced)
+You can apply logic-based overrides at any time. This is perfect for "Primary Color Changers" or user-specific branding.
 
 ```tsx
 const { overrideTheme } = useTheme();
 
-const handleBrandingChange = (brandColor: string) => {
+const updateBrandColor = (newHex: string) => {
   overrideTheme({
     tokens: {
-      accent: brandColor,
-      surface: '#f0f0f0',
-    },
-    shape: {
-      radiusMd: '12px'
+      accent: newHex,
+      accentHover: `${newHex}cc`, // 80% opacity
     }
   });
 };
 ```
 
-## 🏗️ Theme Structure
+---
 
-The engine uses a strictly typed structure to ensure consistency across your app.
+## 🌈 Included Presets
 
-### 1. Brand Palette
-Raw color scales (50-900) for different colors.
-```typescript
-interface BrandPalette {
-  primary: ColorScale;
-  success: ColorScale;
-  warning: ColorScale;
-  error: ColorScale;
-  info: ColorScale;
-}
-```
+| Name | Style | Icon |
+| :--- | :--- | :--- |
+| `light`/`dark` | Multi-purpose | ☀️/🌙 |
+| `ocean` | Deep Blues | 🌊 |
+| `sunset` | Warm | 🌅 |
+| `forest` | Organic Greens | 🌲 |
+| `violet` | Modern Purple | 🔮 |
+| `earth` | Neutral Browns | ☕ |
 
-### 2. Semantic Tokens
-Functional roles that map to brand colors.
-```typescript
-interface SemanticTokens {
-  background: string;
-  surface: string;
-  foreground: string;
-  border: string;
-  accent: string;
-  // ... and more
-}
-```
+## 🏗️ Architecture Detail
+We use a **3-Layer System** to ensure UI logic never touches hardcoded colors:
+1. **Brand Palette**: Raw color scales (e.g. `blue-500`).
+2. **Semantic Tokens**: Functional roles (e.g. `accent` → `brand.primary.600`).
+3. **CSS Variables**: The final performance-focused output.
 
-### 3. Shape & Typography
-Standardized radii and fonts.
-```typescript
-interface ThemeShape {
-  radiusSm: string;
-  radiusMd: string;
-  radiusLg: string;
-}
+## 📖 Documentation
+- [Theming Guide](./THEMING.md) - Deep dive into tokens and overrides.
+- [Publishing Guide](./PUBLISHING.md) - NPM & GitHub Package instructions.
+- [Contributing Guidelines](./CONTRIBUTING.md) 
 
-interface ThemeTypography {
-  fontFamilySans: string;
-  fontFamilyMono: string;
-}
-### 4. Full Theme Config
-The complete object used to define a theme.
-```typescript
-interface ThemeConfig {
-  name: string;
-  colorMode: 'light' | 'dark';
-  palette: BrandPalette;
-  neutral: ColorScale;
-  tokens: SemanticTokens;
-  shape: ThemeShape;
-  typography: ThemeTypography;
-}
-```
+## 👨‍💻 Meet the Maintainer
 
-## 🌪️ Tailwind CSS Integration
+Built with ❤️ by **Abilash**. A UI Engineer focused on scalable design systems and developer tools.
 
-To use your theme tokens as Tailwind utility classes, add the preset to your `tailwind.config.js`:
-
-```javascript
-// tailwind.config.js
-import { themePreset } from 'react-theming-engine/tailwind';
-
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ["./src/**/*.{ts,tsx}"],
-  presets: [themePreset],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}
-```
-
-Now you can use semantic tokens directly in your components:
-
-```tsx
-<div className="bg-surface text-foreground border-border rounded-md p-4">
-  <h1 className="text-primary-600">Dynamic Theming!</h1>
-  <p className="text-foreground-muted">This uses semantic Tailwind tokens.</p>
-</div>
-```
-
-## 🏗️ Architecture
-
-1.  **Brand Palette**: Defines raw color scales (e.g., `blue-500`, `gray-200`).
-2.  **Semantic Tokens**: Maps brand colors to functional roles (e.g., `surface` → `neutral-50`, `primary` → `blue-600`).
-3.  **CSS Variables**: The final output used in your styles (e.g., `--color-surface`).
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Abilash-19)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/abilash-s-84608a23a)
 
 ## 📜 License
-
 MIT © [Abilash](https://github.com/Abilash-19)

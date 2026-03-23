@@ -20,6 +20,7 @@ export { oceanTheme } from "./presets/ocean";
 export { sunsetTheme } from "./presets/sunset";
 export { forestTheme } from "./presets/forest";
 export { violetTheme } from "./presets/violet";
+export { earthTheme } from "./presets/earth";
 
 // ── Utilities ──
 export {
