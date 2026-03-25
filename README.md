@@ -96,6 +96,42 @@ export default {
 
 ---
 
+## 🎨 Color Utilities
+
+The engine exports a rich suite of pure, framework-agnostic utilities to help you work with colors at runtime. These are perfect for calculating hovestates, generating dynamic contrasts, or checking OS preferences.
+
+```tsx
+import { 
+  lighten, 
+  darken, 
+  withOpacity, 
+  getContrastRatio, 
+  prefersDarkMode,
+  hexToHsl
+} from 'react-theming-engine';
+
+// 🔄 Intelligent Manipulation
+const hoverColor = lighten('#2563eb', 10);
+const mutedBg = withOpacity('#2563eb', 0.1); // Returns #2563eb1a
+
+// ♿ Accessibility & Intelligence
+const ratio = getContrastRatio('#ffffff', '#2563eb'); // Result: 5.89 (Passes WCAG AA)
+const isDarkMode = prefersDarkMode(); // Boolean based on OS preference
+
+// 🔄 Advanced Conversion
+const hsl = hexToHsl('#2563eb'); // Returns { h: 221, s: 83, l: 53 }
+```
+
+### 🛠️ Available Functions
+
+| Category | Utilities |
+| :--- | :--- |
+| **Manipulation** | `lighten`, `darken`, `saturate`, `desaturate`, `mixColors`, `withOpacity` |
+| **Conversion** | `hexToRgb`, `rgbToHex`, `rgbToHsl`, `hslToHex`, `hexToHsl`, `hexToRgba` |
+| **Analysis** | `getLuminance`, `getContrastRatio`, `prefersDarkMode` |
+
+---
+
 ## 🏗️ Dynamic Branding (Advanced)
 You can apply logic-based overrides at any time. This is perfect for "Primary Color Changers" or user-specific branding.
 

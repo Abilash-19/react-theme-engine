@@ -32,6 +32,26 @@ export {
 } from "./utils";
 export type { CSSVarMap } from "./utils";
 
+// ── Color Utilities ──
+export {
+  hexToRgb,
+  rgbToHex,
+  rgbToHsl,
+  hslToHex,
+  hexToHsl,
+  withOpacity,
+  hexToRgba,
+  lighten,
+  darken,
+  saturate,
+  desaturate,
+  getLuminance,
+  getContrastRatio,
+  mixColors,
+  prefersDarkMode,
+} from "./colorUtils";
+export type { RGB, HSL } from "./colorUtils";
+
 // ── React ──
 export {
   ThemeProvider,
