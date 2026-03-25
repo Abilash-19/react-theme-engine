@@ -30,14 +30,13 @@ npm install react-theming-engine
 - ⚡ **Zero-Runtime Overhead**: Styles are applied via CSS variables for maximum performance.
 - 🌪️ **Tailwind Friendly**: Includes a first-class preset for utility-first workflows.
 - 🔒 **Type-Safe**: Full TypeScript support with exported types for all tokens.
-- 💾 **Persistence**: Built-in localStorage persistence for user preferences.
 
 ## 🛠️ Technology Stack
 
 - **[React](https://react.dev/)** (`^18.0.0`): Core UI library.
 - **[TypeScript](https://www.typescriptlang.org/)** (`^5.7.0`): Strongly typed programming.
 - **[tsup](https://tsup.egoist.dev/)**: High-performance library bundler.
-- **[Tailwind CSS](https://tailwindcss.com/)**: Optional integration for utility classes.
+- **Styling Flexibility**: Seamlessly integrate with Vanilla CSS, SCSS, CSS-in-JS, or Tailwind CSS.
 
 ## 📦 Installation
 
