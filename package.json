@@ -97,6 +97,7 @@
     "url": "https://github.com/Abilash-19/react-theming-engine"
   },
   "author": "Abilash",
+  "homepage": "https://react-theme-engine.vercel.app",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   }
