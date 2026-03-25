@@ -1,6 +1,6 @@
 {
   "name": "react-theming-engine",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A 3-layer React theming engine: Brand Palette → Semantic Tokens → CSS Variables",
   "type": "module",
   "main": "./dist/index.cjs",
